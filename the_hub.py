@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # coding: UTF-8
 #
 #-------------------------------------------------------------------
@@ -6,7 +7,7 @@
 #           ____                Fichier     : the_hub.py        
 #          / __ \__  __         Projet      : THE HUB           
 #         / /_/ / / / /         Creation    : 08.10.2016        
-#        / ____/ /_/ /          Mise a Jour : 24.10.2016        
+#        / ____/ /_/ /          Mise a Jour : 31.10.2016        
 #       /_/    \__, /           Developpeur : Cyril ESCLASSAN 
 #             /____/            Version     : 1.1 BETA               
 #                               Systeme     : W10 CMD
@@ -31,7 +32,7 @@
 #   Contact : @cynex294 sur Twitter
 #
 #-------------------------------------------------------------------
-#   JOURNAL NOTES
+#   JOURNAL - NOTES
 #
 #   08.10.2016 - 18.10.2016
 #   + Debut du projet THE HUB
@@ -57,7 +58,7 @@
 #   21.10.2016
 #   + Corrections de queslques fautes dans le texte du programme
 #   + Suppression de vieilles constantes innutiles
-#   + Conversion des consts systeme en lambda
+#   + Conversion des consts systeme en lambda sys_x()
 #
 #   23.10.2016
 #   + Reprise du code, il y a des choses qui ne vont pas
@@ -68,9 +69,16 @@
 #   prendre sa place
 #
 #   24.10.2016
-#   + 2:10 Ajout de la fonction d'addition binaire (fonctionnelle) 
+#   + Ajout de la fonction d'addition binaire (fonctionnelle) 
 #   + Constatation, le code manque cruellement de commentaire
-#   + Remplacement des .__len__() par len()
+#   + Remplacement des x.__len__() par len(x)
+#
+#   28.10.2016
+#   + Changement de github : http://github.com/cesclass/the_hub
+#
+#   31.10.2016
+#   + Relecture du code et retouches suivant la convention PEP 8
+#
 #-------------------------------------------------------------------
 
 # import
@@ -83,21 +91,20 @@ from time import sleep;
 #-------------------------------------------------------------------
 
 # id function for lcd()
-LCD_MAIN  = 'main';
-LCD_FACTO = 'facto';
-LCD_BIX   = 'bix';
+LCD_BIX = 'bix';
+LCD_EGG = 'egg';
+LCD_BIN = 'addbin';
+LCD_INFO = 'info';
+LCD_MAIN = 'main';
 LCD_OROUL = 'roulette';
-LCD_EGG   = 'egg';
-LCD_INFO  = 'info';
-LCD_BIN   = 'addbin';
+LCD_FACTO = 'facto';
 
 # Systeme...
 sys_title = lambda: system('title THE HUB');
 sys_theme = lambda: system('color 3f'); # sys-theme... MDR ! (^_^)
-sys_pause = lambda: system('pause > nul');
+sys_pause = lambda: input('');  # system('pause > nul')
 sys_clear = lambda: system('cls');
-sys_size  = lambda: system('mode con cols=52 lines=22');
-
+sys_size = lambda: system('mode con cols=52 lines=22');
 
 #-------------------------------------------------------------------
 
@@ -188,16 +195,16 @@ def lcd(display = '', n = 0):
         print(' +------------------------------------------------+');
         print('                                                   ');
         print('   Programme         : THE HUB (v1.1 BETA)         ');
-        print('   Mise à Jour       : 24.10.2016                  ');
+        print('   Mise à Jour       : 31.10.2016                  ');
         print('   Systèmes          : W7, 8, 10 x86_64            ');
         print('                                                   ');
-        print('   Dev-Langage       : Python3.x                   ');
-        print('   Doc-Langage       : FR-French                   ');
+        print('   Langage (dev)     : Python3.x                   ');
+        print('   Langage (doc)     : FRA / ENG                   ');
         print('                                                   ');
         print('   Concept et Dev    : Cyril ESCLASSAN             ');
         print('   Contact           : @cynex294 - Twitter         ');
         print('                                                   ');
-        print('   Sources github    : cesclass/the_hub/           ');
+        print('   Sources github    : github.com/cesclass/the_hub ');
         print('   Licence           : GPL v3                      ');
         print('                                                   ');
         return True;
@@ -235,7 +242,7 @@ def lcd(display = '', n = 0):
 
 def bissextile():
     
-    while(True): # Oui, c'est une boucle infine, je veux rien savoir, barrez vous !
+    while(True): 
         
         lcd(LCD_BIX);
         print(' Saisir l\'annee à vérifier');
@@ -246,7 +253,6 @@ def bissextile():
 
         try: 
             annee = int(annee);
-        
         except ValueError:
             print(' E: La saisie est incorrecte');
             sys_pause();
@@ -267,7 +273,7 @@ def bix_core(n):
 
     # Si l'annee n est un multiple de 400 OU un multiple de 4
     # sans etre un multiple de 100, l'annee est bissextile
-    if( n%400 == 0 or (n%4 == 0 and n%100 != 0) ):
+    if(n%400 == 0 or (n%4 == 0 and n%100 != 0)):
         return True;
     else:
         return False;
@@ -278,7 +284,7 @@ def bix_core(n):
 
 def factorielle():
 
-    while(True): # Encore un while true...
+    while(True): 
 
         lcd(LCD_FACTO);
         print(' Saisir un nombre a mettre en factorielle');
@@ -289,14 +295,12 @@ def factorielle():
 
         try: 
             nombre = int(nombre);
-        
         except ValueError:
             print(' E: La saisie est incorrecte');
             sys_pause();
             continue;
 
         print(' !(' + str(nombre) + ') =', facto_core(nombre));
-
         sys_pause();
 
 # facto_core work function of factorielle
@@ -326,16 +330,15 @@ def facto_core(n):
 
 #-------------------------------------------------------------------
 
-# openRoulette(none) : bool
+# open_roulette(none) : bool
 
-def openRoulette():
+def open_roulette():
     coins = 1000;
     turn = 0;
 
     while(coins > 0):
 
         lcd(LCD_OROUL, coins);
-
         print(' Choisissez un numero entre 0 et 49 ');
         num = input(' > ');
 
@@ -345,12 +348,10 @@ def openRoulette():
         try:
             num = int(num);
             assert(num <= 49 and num >= 0);
-
         except ValueError:
             print(' E: La saisie est incorrecte');
             sys_pause();
             continue;
-
         except AssertionError:
             print(' E: Le numero saisie est hors', 
                 'des limites : [0-49]');
@@ -363,12 +364,10 @@ def openRoulette():
         try:
             mise = int(mise);
             assert(mise <= coins and mise > 0);
-
         except ValueError:
             print(' E: La saisie est incorrecte');
             sys_pause();
             continue;
-
         except AssertionError:
             print(' E: La somme misée n\'est pas valide'); 
             sys_pause();
@@ -400,16 +399,13 @@ def openRoulette():
         if(win == num):
             gain = 3*mise;
             print(' Bravo, vous avez gagné', gain, 'jetons (^_^)');
-
         elif(win_color == num_color):
             gain = ceil(mise/2);
             print(' Bravo, vous avez récupéré', gain, 'jetons (°_°)');
-
         else:
             print(' Oups, vous avez perdu', mise, 'jetons (-_-)');
 
         coins += gain;
-
         sys_pause();
 
     lcd(LCD_OROUL, coins);
@@ -422,17 +418,17 @@ def openRoulette():
 
 #-------------------------------------------------------------------
 
-# additionBinaire(none) : bool
+# addition_binaire(none) : bool
 
-def additionBinaire():
+def addition_binaire():
     
-    num1 = ''
-    num2 = ''
-    nbin_add = ''
+    num1 = str();
+    num2 = str();
+    nbin_add = str();
 
     while(True):
-        lcd(LCD_BIN);
 
+        lcd(LCD_BIN);
         print(' Saisissez le premier nombre en binaire');
         num1 = input(' > ');
 
@@ -441,7 +437,6 @@ def additionBinaire():
 
         if(num1.upper() == 'Q'):
             break;
-
         elif(not num1.isnumeric()):
             print(' E: La saisie est incorrecte');
             sys_pause();
@@ -455,7 +450,7 @@ def additionBinaire():
             sys_pause();
             continue;
 
-        print('')
+        print('');
         print(' Saisissez le second nombre en binaire');
         num2 = input(' > ');
 
@@ -480,7 +475,6 @@ def additionBinaire():
         print(' .', nbin_1, '\n +', nbin_2, '\n =', nbin_add);
         sys_pause();
 
-
 # add_bin_core work function of additionBinaire
 
 # add_bin_core(nbin_1 : str, nbin_2 : str) : str, str, str
@@ -491,15 +485,16 @@ def additionBinaire():
 # parametre dans une version modifié pour l'affichage de nombres binaires
 
 def add_bin_core(nbin_1, nbin_2):
+
     # reverse str
     nbin_1 = ''.join(reversed(nbin_1));
     nbin_2 = ''.join(reversed(nbin_2));
 
-    addition = '';
-    lePlusGrand = '';
+    addition = str();
+    lePlusGrand = str();
     turn = 0;
     supp = 0;
-    retenu = False
+    retenu = False;
 
     if(len(nbin_1) == len(nbin_2)):
         turn = len(nbin_1);
@@ -520,14 +515,12 @@ def add_bin_core(nbin_1, nbin_2):
                 retenu = False;
             else :
                 addition += '0';
-
         elif(nbin_1[i] == '1' and nbin_2[i] == '1'):
             if(retenu):
                 addition += '1';
             else:
                 addition += '0';
             retenu = True;
-
         else:
             if(retenu):
                 addition += '0';
@@ -552,55 +545,54 @@ def add_bin_core(nbin_1, nbin_2):
     if(retenu):
         addition += '1';
 
-    retourAdd = '';
-    retourBin1 = '';
-    retourBin2 = '';
+    retour_add = str();
+    retour_bin_1 = str();
+    retour_bin_2 = str();
 
     # Separation tous les 4 chiffres
     for i in range(len(addition)):
         if(i%4 == 0 and i != 0):
-            retourAdd += ' ';
-        retourAdd += addition[i];
+            retour_add += ' ';
+        retour_add += addition[i];
 
     for i in range(len(nbin_1)):
         if(i%4 == 0 and i != 0):
-            retourBin1 += ' ';
-        retourBin1 += nbin_1[i];
+            retour_bin_1 += ' ';
+        retour_bin_1 += nbin_1[i];
 
     for i in range(len(nbin_2)):
         if(i%4 == 0 and i != 0):
-            retourBin2 += ' ';
-        retourBin2 += nbin_2[i];
+            retour_bin_2 += ' ';
+        retour_bin_2 += nbin_2[i];
 
     # Ajout d'espaces pour l'allignement de la presentation
-    if(len(retourBin1) > len(retourBin2)):
-        for i in range(len(retourBin2), len(retourBin1)):
-            retourBin2 += ' ';
+    if(len(retour_bin_1) > len(retour_bin_2)):
+        for i in range(len(retour_bin_2), len(retour_bin_1)):
+            retour_bin_2 += ' ';
+    elif(len(retour_bin_1) < len(retour_bin_2)):
+        for i in range(len(retour_bin_1), len(retour_bin_2)):
+            retour_bin_1 += ' ';
 
-    elif(len(retourBin1) < len(retourBin2)):
-        for i in range(len(retourBin1), len(retourBin2)):
-            retourBin1 += ' ';
+    if(len(retour_bin_1) < len(retour_add)):
+        for i in range(len(retour_bin_1), len(retour_add)):
+            retour_bin_1 += ' ';
 
-    if(len(retourBin1) < len(retourAdd)):
-        for i in range(len(retourBin1), len(retourAdd)):
-            retourBin1 += ' ';
-
-    if(len(retourBin2) < len(retourAdd)):
-        for i in range(len(retourBin2), len(retourAdd)):
-            retourBin2 += ' ';
+    if(len(retour_bin_2) < len(retour_add)):
+        for i in range(len(retour_bin_2), len(retour_add)):
+            retour_bin_2 += ' ';
 
     # re-reverse str
-    retourAdd = ''.join(reversed(retourAdd));
-    retourBin1 = ''.join(reversed(retourBin1));
-    retourBin2 = ''.join(reversed(retourBin2));
+    retour_add = ''.join(reversed(retour_add));
+    retour_bin_1 = ''.join(reversed(retour_bin_1));
+    retour_bin_2 = ''.join(reversed(retour_bin_2));
 
-    return retourAdd, retourBin1, retourBin2;
+    return retour_add, retour_bin_1, retour_bin_2;
 
 #-------------------------------------------------------------------
 
-# setScreen(none) : bool
+# set_screen(none) : bool
 
-def setScreen():
+def set_screen():
 
     sys_size();
     sys_theme();
@@ -616,13 +608,13 @@ def setScreen():
 def egg():
     lcd(LCD_EGG)
 
-    temps = 0
-    cycle = 0.125   # 40 * 0.125 = 5.0s
+    temps = 0;
+    cycle = 0.125;  # 40 * 0.125 = 5.0s
                     # 1 tour = 8*0.125
                     # 5.0s = 5 tours
-    color = 'color 0'
+    color = 'color 0';
 
-    system('title 42')
+    system('title 42');
 
     while(temps < 5):
         for i in range(8, 16): 
@@ -631,29 +623,29 @@ def egg():
             sleep(cycle);
             temps += cycle;
 
-    setScreen();
+    set_screen();
 
 #-------------------------------------------------------------------
 
 # main(none) : none
 
 def main():
-    setScreen();
+    set_screen();
     select = "";
 
     while(True):
 
+        # Display and input
         lcd(LCD_MAIN);
         select = input(' > ');
 
-        # Exit
-        if(select.upper() == 'Q'):
+        if(select.upper() == 'Q'):  # Exit
             print('\n Merci d\'avoir utilisé THE HUB. (^_^)');
             sys_pause();
             sys_clear();
             break;
 
-        # Bloc anti erreurs
+        # Errors check
         try:
             select = int(select);
         except ValueError:
@@ -661,32 +653,25 @@ def main():
             sys_pause();
             continue;
 
-        # Switch Case, appel de fonctions
+        # Switch Case, function call
         if(select == 42):   # Egg
             egg();
-
         elif(select == 1):  # Informations
             lcd(LCD_INFO);      
             sys_pause();
-
         elif(select == 2):  # Bissextile
             bissextile();
-
         elif(select == 3):  # Factorielle
             factorielle();
-
         elif(select == 4):  # OpenRoulette
-            openRoulette();
-
+            open_roulette();
         elif(select == 5):  # AdditionBinaire
-            additionBinaire();
-
+            addition_binaire();
         else:   # select != 1 OU 2 OU 3 OU 4 OU 5
             print(' E: La saisie est incorrecte');
             sys_pause();
             
-    return 0;
-    # end
+    return 0;   # end
 
 #-------------------------------------------------------------------
 
